@@ -11,7 +11,7 @@ printuse(){
 buildkernel(){
 	echo $0
 
-	cd ../NUC970_Linux_Kernel
+	cd ../linux3.10/
 	make dtbs
 	cp arch/arm/boot/dts/nuc972-evb.dtb ../image/
 	make uImage -j8
@@ -21,7 +21,7 @@ buildkernel(){
 }
 builduboot(){
 	echo $0
-	cd ../uboot.v2016.11/
+	cd ../uboot/
 	make ARCH=arm CROSS_COMPILE=arm-linux-
 	cd -
 }
