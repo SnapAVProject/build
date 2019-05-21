@@ -5,37 +5,109 @@ printuse(){
 
 }
 
-
-
-
 buildkernel(){
-	echo $0
-
+	echo buildkernel
 	cd ../linux3.10/
 	make dtbs
-	cp arch/arm/boot/dts/nuc972-evb.dtb ../image/
+	#cp arch/arm/boot/dts/nuc972-evb.dtb ../image/
+
 	make uImage -j8
-	cp ../image/970uimage /home/tftp/970uImage
+	#cp ../image/970uimage /home/tftp/970uImage
+
+	#dd if=/dev/zero of=../image/boot.img bs=1M count=6
+
+	cat  arch/arm/boot/uImage > ../image/boot.img
+	sizeo=`du ../image/boot.img -b | awk '{print $1}'`
+	echo $sizeo
+	size=`expr 4 \* 1024 \* 1024 - $sizeo`
+	echo $size
+	dd if=/dev/zero of=../image/boot.img.tmp   bs=1 count=$size 
+	cat ../image/boot.img.tmp >> ../image/boot.img
+	if [ 1 -eq 0 ];then
+		cat arch/arm/boot/dts/nuc972-evb.dtb >>../image/boot.img
+		sizeo=`du ../image/boot.img -b | awk '{print $1}'`
+		echo $sizeo
+		size=`expr 6 \* 1024 \* 1024 - $sizeo`
+		echo $size
+		dd if=/dev/zero of=../image/boot.img.tmp   bs=1 count=$size 
+		cat ../image/boot.img.tmp >> ../image/boot.img
+	fi
+	rm ../image/boot.img.tmp
+
 	cd -
 
 }
 builduboot(){
-	echo $0
+	echo builduboot
 	cd ../uboot/
 	make ARCH=arm CROSS_COMPILE=arm-linux-
+	cp u-boot.bin ../image/
 	cd -
 }
 
 buildrootfs(){
-	echo $0
+	echo buildrootfs
 	cd ../Rootfs/
 	./buildjffs2img.sh
 	cp rootfs.img ../image/
+	cd -
+}
+buildbootflag(){
+	echo buildbootflag
+	echo  "SNAPAV_OTA" > ../image/flag.img
+	sizeo=`du ../image/flag.img -b | awk '{print $1}'`
+	echo $sizeo
+	size=`expr 128 \* 1024 - $sizeo`
+	echo $size
+	dd if=/dev/zero of=../image/boot.img.tmp   bs=1 count=$size 
+	cat ../image/boot.img.tmp >> ../image/flag.img
+	rm ../image/boot.img.tmp
+
+
+}
+buildbootloader() {
+	cat ../image/u-boot-spl.bin > ../image/bootloader.img
+	sizeo=`du ../image/bootloader.img -b | awk '{print $1}'`
+	echo $sizeo
+	size=`expr 512 \* 1024 - $sizeo`
+	echo $size
+	dd if=/dev/zero of=../image/boot.img.tmp   bs=1 count=$size 
+	cat ../image/boot.img.tmp >> ../image/bootloader.img
+
+	cat ../image/env_nand.txt >> ../image/bootloader.img
+	sizeo=`du ../image/bootloader.img -b | awk '{print $1}'`
+	echo $sizeo
+	size=`expr 1024 \* 1024 - $sizeo`
+	echo $size
+	dd if=/dev/zero of=../image/boot.img.tmp   bs=1 count=$size 
+	cat ../image/boot.img.tmp >> ../image/bootloader.img
+
+	cat ../image/u-boot.bin >> ../image/bootloader.img
+
+
+	sizeo=`du ../image/bootloader.img -b | awk '{print $1}'`
+	echo $sizeo
+	size=`expr 1920 \* 1024 - $sizeo`
+	echo $size
+	dd if=/dev/zero of=../image/boot.img.tmp   bs=1 count=$size 
+	cat ../image/boot.img.tmp >> ../image/bootloader.img
+
+	cat ../image/flag.img >> ../image/bootloader.img
+
+	return;
+	sizeo=`du ../image/bootloader.img -b | awk '{print $1}'`
+	echo $sizeo
+	size=`expr 2048 \* 1024 - $sizeo`
+	echo $size
+	dd if=/dev/zero of=../image/boot.img.tmp   bs=1 count=$size 
+	cat ../image/boot.img.tmp >> ../image/bootloader.img
+
+
 }
 buildall(){
-builduboot
-buildkernel
-buildrootfs
+	builduboot
+	buildkernel
+	#buildrootfs
 
 }
 
@@ -56,7 +128,13 @@ case $1 in
 		builduboot;
 		;;
 	"rootfs")
-		buildrootfs
+		buildrootfs;
+		;;
+	"flag")
+		buildbootflag;
+		;;
+	"boot")
+		buildbootloader;
 		;;
 	"all")
 		buildall
