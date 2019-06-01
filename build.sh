@@ -12,6 +12,8 @@ buildkernel(){
 	#cp arch/arm/boot/dts/nuc972-evb.dtb ../image/
 
 	make uImage -j8
+	make modules -j8
+
 	#cp ../image/970uimage /home/tftp/970uImage
 
 	#dd if=/dev/zero of=../image/boot.img bs=1M count=6
@@ -54,14 +56,30 @@ buildrootfs(){
 }
 buildbootflag(){
 	echo buildbootflag
-	echo  "SNAPAV_OTA" > ../image/flag.img
-	sizeo=`du ../image/flag.img -b | awk '{print $1}'`
+	echo  "SNAPAV_OTA" >flag.img
+	sizeo=`du flag.img -b | awk '{print $1}'`
+	sizeo=`expr $sizeo - 1`
 	echo $sizeo
-	size=`expr 128 \* 1024 - $sizeo`
+	size=`expr 128 \* 1024 - $sizeo `
 	echo $size
-	dd if=/dev/zero of=../image/boot.img.tmp   bs=1 count=$size 
-	cat ../image/boot.img.tmp >> ../image/flag.img
-	rm ../image/boot.img.tmp
+	dd if=/dev/zero of=flag.img   bs=1 count=$size seek=$sizeo
+	#dd if=/dev/zero of=../image/boot.img.tmp   bs=1 count=$size 
+	#cat ../image/boot.img.tmp >> ../image/flag.img
+
+	if true; then	
+	echo  "FACTORY_INFO" >>flag.img
+	sizeo=`du flag.img -b | awk '{print $1}'`
+	sizeo=`expr $sizeo - 1`
+	echo $sizeo
+	size=`expr 256 \* 1024 - $sizeo`
+	echo $size
+	dd if=/dev/zero of=flag.img   bs=1 count=$size seek=$sizeo
+
+	#dd if=/dev/zero of=../image/boot.img.tmp   bs=1 count=$size  
+	
+	cat flag.img > ../image/flag.img
+	fi
+	rm flag.img
 
 
 }
