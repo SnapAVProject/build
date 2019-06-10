@@ -8,7 +8,7 @@ printuse(){
 buildkernel(){
 	echo buildkernel
 	cd ../linux3.10/
-	make dtbs
+	#make dtbs
 	#cp arch/arm/boot/dts/nuc972-evb.dtb ../image/
 
 	make uImage -j8
@@ -37,6 +37,7 @@ buildkernel(){
 	rm ../image/boot.img.tmp
 
 	cd -
+	./upload.sh ../image/boot.img
 
 }
 builduboot(){
