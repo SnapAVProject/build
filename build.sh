@@ -106,7 +106,7 @@ buildbootloader() {
 
 	sizeo=`du ../image/bootloader.img -b | awk '{print $1}'`
 	echo $sizeo
-	size=`expr 1920 \* 1024 - $sizeo`
+	size=`expr 1792 \* 1024 - $sizeo`
 	echo $size
 	dd if=/dev/zero of=../image/boot.img.tmp   bs=1 count=$size 
 	cat ../image/boot.img.tmp >> ../image/bootloader.img
