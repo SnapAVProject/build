@@ -1,9 +1,13 @@
 #!/bin/bash
+
+boardtype=$2
+
 printuse(){
 
 	echo Usage:$0 all/uboot/kernel/rootfs
 
 }
+
 
 buildkernel(){
 	echo buildkernel
@@ -37,7 +41,7 @@ buildkernel(){
 	rm ../image/boot.img.tmp
 
 	cd -
-	./upload.sh ../image/boot.img
+	./upload.sh ../image/boot.img $boardtype
 
 }
 builduboot(){
