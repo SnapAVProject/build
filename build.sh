@@ -12,6 +12,17 @@ printuse(){
 buildkernel(){
 	echo buildkernel
 	cd ../linux3.10/
+	if [ $boardtype = 'snapav2d'  ];then
+		echo "cp ../build/kernelconfig/snapav2d_config .config"
+		cp ../build/kernelconfig/snapav2d_config .config
+	elif [ $boardtype = 'snapav8d' ];then
+		
+		echo "cp ../build/kernelconfig/snapav8d_config .config"
+		cp ../build/kernelconfig/snapav8d_config .config
+	else
+		echo "unsupport  board $boardtype"
+		exit -1;
+	fi
 	#make dtbs
 	#cp arch/arm/boot/dts/nuc972-evb.dtb ../image/
 
