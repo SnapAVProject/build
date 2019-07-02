@@ -68,6 +68,8 @@ builduboot(){
 buildrootfs(){
 	echo buildrootfs
 	cd ../NUC970_Buildroot/
+	echo cp ../build/buildrootconfig/${boardtype}_buildroot_config .config
+	cp ../build/buildrootconfig/${boardtype}_buildroot_config .config
 	make BOARDTYPE=$boardtype SNAPAV_APP_VERSION=$app SNAPAV_DSP_VERSION=$dsp
 
 	#cd ../Rootfs/
@@ -150,6 +152,7 @@ buildfw(){
 	elif [ $boardtype = 'snapav8d' ];then
 		cd ./fw/snapav8d/
 	fi
+	echo $dsp > snapav-firmware/deleteDb.config
 
 	./create-update-firmware.sh $app
 	cd -
