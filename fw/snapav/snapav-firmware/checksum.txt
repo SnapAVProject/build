@@ -1,2 +1,2 @@
-4e227372aed0a0de834dea691035f746  boot.img
-2b3d95c4718c3e7509999905e2953b0b  rootfs.img
+0a1e582e8fcd35ceb07c2f0b280c9a20  boot.img
+0fd3c23cf114f5fc6344d6e55312b3a0  rootfs.img
