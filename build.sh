@@ -1,6 +1,8 @@
 #!/bin/bash
 
 boardtype=$2
+app=$3
+dsp=$4
 
 printuse(){
 
@@ -65,9 +67,12 @@ builduboot(){
 
 buildrootfs(){
 	echo buildrootfs
-	cd ../Rootfs/
-	./buildjffs2img.sh
-	cp rootfs.img ../image/
+	cd ../NUC970_Buildroot/
+	make BOARDTYPE=$boardtype SNAPAV_APP_VERSION=$app SNAPAV_DSP_VERSION=$dsp
+
+	#cd ../Rootfs/
+	#./buildjffs2img.sh
+	#cp rootfs.img ../image/
 	cd -
 }
 buildbootflag(){
@@ -138,10 +143,21 @@ buildbootloader() {
 
 
 }
+buildfw(){
+	echo build fw
+	if [ $boardtype = 'snapav2d' ];then
+		cd ./fw/snapav/
+	elif [ $boardtype = 'snapav8d' ];then
+		cd ./fw/snapav8d/
+	fi
+
+	./create-update-firmware.sh $app
+	cd -
+}
 buildall(){
 	builduboot
 	buildkernel
-	#buildrootfs
+	buildrootfs
 
 }
 
@@ -169,6 +185,9 @@ case $1 in
 		;;
 	"boot")
 		buildbootloader;
+		;;
+	"fw")
+		buildfw;
 		;;
 	"all")
 		buildall

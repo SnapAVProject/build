@@ -1,0 +1,2 @@
+62731a41a7df493ce03bddc59f16b9b6  boot.img
+8ebec4e3cdcc2ca9c634e957d0a53734  rootfs.img
