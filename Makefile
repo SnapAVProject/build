@@ -6,7 +6,7 @@ all:
 	 echo ${boardtype}
 	./build.sh kernel $(boardtype)
 	./build.sh rootfs $(boardtype) ${appversion} ${dspversion}
-	./build.sh fw $(boardtype) `date "+%Y%m%d"`.${appversion}.${dspversion} ${deletedatabase}
+	./build.sh fw $(boardtype) ${appversion}.${dspversion}_`date "+%Y%m%d"` ${deletedatabase}
 
 
 	#sudo cp ../image/boot.img /usr/share/nginx/html/snapav/
