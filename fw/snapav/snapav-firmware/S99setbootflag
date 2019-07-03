@@ -1,0 +1,17 @@
+#!/bin/sh
+#
+# Start/stop nginx
+#
+
+PIDFILE=/var/run/nginx.pid
+
+case "$1" in
+  start)
+	echo "Starting setbootflag..."
+	
+	/usr/bin/snapav_updater -s
+
+	;;
+  *)
+	exit 1
+esac

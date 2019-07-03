@@ -1,7 +1,8 @@
-d41d8cd98f00b204e9800998ecf8427e  boardtype
-60627754e96b34d50120037be3f39f1a  boot.img
+3916beb7d3efd5388418d31f55972166  boardtype
+f939fe2839fe63083aae5888f1d0282a  boot.img
 d42f2da1df5ecdf29be4ac27edda0c12  deleteDb.config
 12d00954b49de63fd89694f2e4cf9db9  env.img
-40829c89e54b2218f5bd652357f007de  rootfs.img
-0c541d5105f6a44130dee192e133cdd6  setup.sh
+1f102c8568ff4aa871c00652bc8f73f5  rootfs.img
+c6dc0e6dd481311cc8efa51af5e78ccb  S99setbootflag
+31077e2d5d3d5086b32e5f2d27ebbfaa  setup.sh
 a387b9e02a0291831adafbbccf9003da  u-boot.bin
