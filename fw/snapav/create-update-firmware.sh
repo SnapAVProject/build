@@ -1,4 +1,4 @@
-model=EA-RSP-2D-200
+model=`cat ../../../NUC970_Buildroot/output/target/etc/hostname`
 dir=snapav-firmware
 fwname=${model}_${1}
 
@@ -15,9 +15,10 @@ do
 	#md5sum rootfs.img >> checksum.txt
 done 
 cd -
-cat ../../../NUC970_Buildroot/output/target/etc/hostname > snapav-firmware/boardtype
+#cat ../../../NUC970_Buildroot/output/target/etc/hostname > snapav-firmware/boardtype
+echo $model > snapav-firmware/boardtype
 
 zip -r $fwname.dat $dir
-echo "cp $fwname.zip /usr/share/nginx/html/snapav/"
-cp $fwname.dat /usr/share/nginx/html/snapav/
+echo "cp $fwname.dat /usr/share/nginx/html/snapav8d/"
+cp $fwname.dat /usr/share/nginx/html/snapav8d/
 mv $fwname.dat ../

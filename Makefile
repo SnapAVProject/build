@@ -1,10 +1,12 @@
 boardtype :=snapav2d
-appversion :=143
-dspversion :=105
-deletedatabase :=false
+appversion :=142
+dspversion :=102
+deletedatabase :=true
 all:
 	 echo ${boardtype}
 	./build.sh kernel $(boardtype)
+	rm  /home/cean/work/nuvoton/NUC970_Buildroot/output/target/etc/network/interfaces
+	cp /home/cean/work/nuvoton/NUC970_Buildroot/board/nuvoton/hs_rootfs/etc/network/interfaces.bk /home/cean/work/nuvoton/NUC970_Buildroot/output/target/etc/network/interfaces
 	./build.sh rootfs $(boardtype) ${appversion} ${dspversion}
 	./build.sh fw $(boardtype) ${appversion}.${dspversion}_`date "+%Y%m%d"` ${deletedatabase}
 

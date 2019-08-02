@@ -14,17 +14,30 @@ printuse(){
 buildkernel(){
 	echo buildkernel
 	cd ../linux3.10/
+
+	#echo "cp ../build/kernelconfig/${boardtype}_config .config"
+	cp ../build/kernelconfig/${boardtype}_config .config
+if [ false ] ;then
 	if [ $boardtype = 'snapav2d'  ];then
 		echo "cp ../build/kernelconfig/snapav2d_config .config"
 		cp ../build/kernelconfig/snapav2d_config .config
 	elif [ $boardtype = 'snapav8d' ];then
-		
 		echo "cp ../build/kernelconfig/snapav8d_config .config"
 		cp ../build/kernelconfig/snapav8d_config .config
+	elif [ $boardtype = 'snapav12d' ];then
+		echo "cp ../build/kernelconfig/snapav12d_config .config"
+		cp ../build/kernelconfig/snapav12d_config .config
+	elif [ $boardtype = 'snapav16d' ];then
+		echo "cp ../build/kernelconfig/snapav16d_config .config"
+		cp ../build/kernelconfig/snapav16d_config .config
+	elif [ $boardtype = 'snapav51' ];then
+		echo "cp ../build/kernelconfig/snapav51_config .config"
+		cp ../build/kernelconfig/snapav51_config .config
 	else
 		echo "unsupport  board $boardtype"
 		exit -1;
 	fi
+fi
 	#make dtbs
 	#cp arch/arm/boot/dts/nuc972-evb.dtb ../image/
 
@@ -151,6 +164,12 @@ buildfw(){
 		cd ./fw/snapav/
 	elif [ $boardtype = 'snapav8d' ];then
 		cd ./fw/snapav8d/
+	elif [ $boardtype = 'snapav12d' ];then
+		cd ./fw/snapav12d/
+	elif [ $boardtype = 'snapav16d' ];then
+		cd ./fw/snapav16d/
+	elif [ $boardtype = 'snapav51' ];then
+		cd ./fw/snapav51/
 	fi
 	echo $dsp > snapav-firmware/deleteDb.config
 
