@@ -1,7 +1,7 @@
-boardtype :=snapav2d
-appversion :=142
-dspversion :=102
-deletedatabase :=true
+boardtype :=snapav8d
+appversion :=249
+dspversion :=106
+deletedatabase :=false
 all:
 	 echo ${boardtype}
 	./build.sh kernel $(boardtype)

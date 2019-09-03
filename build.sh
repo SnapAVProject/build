@@ -48,6 +48,22 @@ fi
 
 	#dd if=/dev/zero of=../image/boot.img bs=1M count=6
 
+	if [ $boardtype = 'snapav2d'  ];then
+	 cp drivers/input/keyboard/gpio_keys.ko ../NUC970_Buildroot/board/nuvoton/hs_rootfs/lib/modules/3.10.108+/
+	elif [ $boardtype = 'snapav8d' ];then
+	 echo cp drivers/input/keyboard/gpio_keys.ko ../NUC970_Buildroot/board/nuvoton/hs_rootfs_8d/lib/modules/3.10.108+/
+	 cp drivers/input/keyboard/gpio_keys.ko ../NUC970_Buildroot/board/nuvoton/hs_rootfs_8d/lib/modules/3.10.108+/
+	elif [ $boardtype = 'snapav12d' ];then
+	 cp drivers/input/keyboard/gpio_keys.ko ../NUC970_Buildroot/board/nuvoton/hs_rootfs_12d/lib/modules/3.10.108+/
+	elif [ $boardtype = 'snapav16d' ];then
+	 cp drivers/input/keyboard/gpio_keys.ko ../NUC970_Buildroot/board/nuvoton/hs_rootfs_16d/lib/modules/3.10.108+/
+	elif [ $boardtype = 'snapav51' ];then
+ 	 cp drivers/input/keyboard/gpio_keys.ko ../NUC970_Buildroot/board/nuvoton/hs_rootfs_51d/lib/modules/3.10.108+/
+	else
+		echo "unsupport  board $boardtype"
+	fi
+
+
 	cat  arch/arm/boot/uImage > ../image/boot.img
 	sizeo=`du ../image/boot.img -b | awk '{print $1}'`
 	echo $sizeo
