@@ -1,6 +1,6 @@
-boardtype :=snapav8d
-appversion :=249
-dspversion :=106
+boardtype :=snapav12d
+appversion :=152
+dspversion :=100
 deletedatabase :=false
 all:
 	 echo ${boardtype}
