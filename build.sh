@@ -17,27 +17,6 @@ buildkernel(){
 
 	#echo "cp ../build/kernelconfig/${boardtype}_config .config"
 	cp ../build/kernelconfig/${boardtype}_config .config
-if [ false ] ;then
-	if [ $boardtype = 'snapav2d'  ];then
-		echo "cp ../build/kernelconfig/snapav2d_config .config"
-		cp ../build/kernelconfig/snapav2d_config .config
-	elif [ $boardtype = 'snapav8d' ];then
-		echo "cp ../build/kernelconfig/snapav8d_config .config"
-		cp ../build/kernelconfig/snapav8d_config .config
-	elif [ $boardtype = 'snapav12d' ];then
-		echo "cp ../build/kernelconfig/snapav12d_config .config"
-		cp ../build/kernelconfig/snapav12d_config .config
-	elif [ $boardtype = 'snapav16d' ];then
-		echo "cp ../build/kernelconfig/snapav16d_config .config"
-		cp ../build/kernelconfig/snapav16d_config .config
-	elif [ $boardtype = 'snapav51' ];then
-		echo "cp ../build/kernelconfig/snapav51_config .config"
-		cp ../build/kernelconfig/snapav51_config .config
-	else
-		echo "unsupport  board $boardtype"
-		exit -1;
-	fi
-fi
 	#make dtbs
 	#cp arch/arm/boot/dts/nuc972-evb.dtb ../image/
 
@@ -58,7 +37,7 @@ fi
 	elif [ $boardtype = 'snapav16d' ];then
 	 cp drivers/input/keyboard/gpio_keys.ko ../NUC970_Buildroot/board/nuvoton/hs_rootfs_16d/lib/modules/3.10.108+/
 	elif [ $boardtype = 'snapav51' ];then
- 	 cp drivers/input/keyboard/gpio_keys.ko ../NUC970_Buildroot/board/nuvoton/hs_rootfs_51d/lib/modules/3.10.108+/
+ 	 cp drivers/input/keyboard/gpio_keys.ko ../NUC970_Buildroot/board/nuvoton/hs_rootfs_51/lib/modules/3.10.108+/
 	else
 		echo "unsupport  board $boardtype"
 	fi
