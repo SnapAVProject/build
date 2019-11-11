@@ -68,6 +68,7 @@ buildkernel(){
 builduboot(){
 	echo builduboot
 	cd ../uboot/
+	cp ../build/ubootconfig/defconfig .config
 	make ARCH=arm CROSS_COMPILE=../host/usr/bin/arm-linux-
 	cp u-boot.bin ../image/
 	cd -
