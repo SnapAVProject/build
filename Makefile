@@ -5,8 +5,8 @@ deletedatabase :=false
 all:
 	 echo ${boardtype}
 	./build.sh kernel $(boardtype)
-	rm  /home/cean/work/nuvoton/NUC970_Buildroot/output/target/etc/network/interfaces
-	cp /home/cean/work/nuvoton/NUC970_Buildroot/board/nuvoton/hs_rootfs/etc/network/interfaces.bk /home/cean/work/nuvoton/NUC970_Buildroot/output/target/etc/network/interfaces
+	rm  ../nuc970_buildroot/output/target/etc/network/interfaces
+	cp ../nuc970_buildroot/board/nuvoton/hs_rootfs/etc/network/interfaces.bk ../nuc970_buildroot/output/target/etc/network/interfaces
 	./build.sh rootfs $(boardtype) ${appversion} ${dspversion}
 	./build.sh fw $(boardtype) ${appversion}.${dspversion}_`date "+%Y%m%d"` ${deletedatabase}
 

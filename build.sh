@@ -28,16 +28,16 @@ buildkernel(){
 	#dd if=/dev/zero of=../image/boot.img bs=1M count=6
 
 	if [ $boardtype = 'snapav2d'  ];then
-	 cp drivers/input/keyboard/gpio_keys.ko ../NUC970_Buildroot/board/nuvoton/hs_rootfs/lib/modules/3.10.108+/
+	 cp drivers/input/keyboard/gpio_keys.ko ../nuc970_buildroot/board/nuvoton/hs_rootfs/lib/modules/3.10.108+/
 	elif [ $boardtype = 'snapav8d' ];then
-	 echo cp drivers/input/keyboard/gpio_keys.ko ../NUC970_Buildroot/board/nuvoton/hs_rootfs_8d/lib/modules/3.10.108+/
-	 cp drivers/input/keyboard/gpio_keys.ko ../NUC970_Buildroot/board/nuvoton/hs_rootfs_8d/lib/modules/3.10.108+/
+	 echo cp drivers/input/keyboard/gpio_keys.ko ../nuc970_buildroot/board/nuvoton/hs_rootfs_8d/lib/modules/3.10.108+/
+	 cp drivers/input/keyboard/gpio_keys.ko ../nuc970_buildroot/board/nuvoton/hs_rootfs_8d/lib/modules/3.10.108+/
 	elif [ $boardtype = 'snapav12d' ];then
-	 cp drivers/input/keyboard/gpio_keys.ko ../NUC970_Buildroot/board/nuvoton/hs_rootfs_12d/lib/modules/3.10.108+/
+	 cp drivers/input/keyboard/gpio_keys.ko ../nuc970_buildroot/board/nuvoton/hs_rootfs_12d/lib/modules/3.10.108+/
 	elif [ $boardtype = 'snapav16d' ];then
-	 cp drivers/input/keyboard/gpio_keys.ko ../NUC970_Buildroot/board/nuvoton/hs_rootfs_16d/lib/modules/3.10.108+/
+	 cp drivers/input/keyboard/gpio_keys.ko ../nuc970_buildroot/board/nuvoton/hs_rootfs_16d/lib/modules/3.10.108+/
 	elif [ $boardtype = 'snapav51' ];then
- 	 cp drivers/input/keyboard/gpio_keys.ko ../NUC970_Buildroot/board/nuvoton/hs_rootfs_51/lib/modules/3.10.108+/
+ 	 cp drivers/input/keyboard/gpio_keys.ko ../nuc970_buildroot/board/nuvoton/hs_rootfs_51/lib/modules/3.10.108+/
 	else
 		echo "unsupport  board $boardtype"
 	fi
@@ -68,14 +68,14 @@ buildkernel(){
 builduboot(){
 	echo builduboot
 	cd ../uboot/
-	make ARCH=arm CROSS_COMPILE=arm-linux-
+	make ARCH=arm CROSS_COMPILE=../host/usr/bin/arm-linux-
 	cp u-boot.bin ../image/
 	cd -
 }
 
 buildrootfs(){
 	echo buildrootfs
-	cd ../NUC970_Buildroot/
+	cd ../nuc970_buildroot/
 	echo cp ../build/buildrootconfig/${boardtype}_buildroot_config .config
 	cp ../build/buildrootconfig/${boardtype}_buildroot_config .config
 	make BOARDTYPE=$boardtype SNAPAV_APP_VERSION=$app SNAPAV_DSP_VERSION=$dsp

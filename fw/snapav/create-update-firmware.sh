@@ -1,4 +1,4 @@
-model=`cat ../../../NUC970_Buildroot/output/target/etc/hostname`
+model=`cat ../../../nuc970_buildroot/output/target/etc/hostname`
 dir=snapav-firmware
 fwname=${model}_${1}
 
