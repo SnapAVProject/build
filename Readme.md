@@ -1,29 +1,31 @@
 # build step
-## first build 
+## 1 first build 
 ... only need to do once 
-### build buildroot to create cross_compile
+### 1.1 build buildroot to create cross_compile
 `./build.sh rootfs {boardtype} {appversion} {dspversion}`
-### config host softlink in up folder 
+### 1.2 config host softlink in up folder 
 `ln -s ../nuc970_buildroot/output/host ../host `
-### create image folder to save images
+### 1.3 create image folder to save images
 `mkdir ../image`
 
 
-## nomorl build
-### set env
+
+
+## 2 nomorl build
+### 2.1 set env
 `source ./build.sh env`
-### build uboot
+### 2.2 build uboot
 `./build.sh uboot`
-### build kernel
+### 2.3 build kernel
 `./build.sh kernel {boardtype}`
-### build flag
+### 2.4 build flag
 `./build.sh flag` 
-### build bootloader.img
+### 2.5 build bootloader.img
 `./build.sh boot`
-### build rootfs
+### 2.6 build rootfs
 `./build.sh rootfs {boardtype} {appversion} {dspversion}`
-### build ota upfrade firmware
+### 2.7 build ota upfrade firmware
 `./build.sh fw {boardtype} {firmwareversion} {deletedatabase}`
-### easy build 
+### 2.8 easy build 
 `make boardtype={type} appversion={appversion} dspversion=dspversion deletedatabase={true/false}`
 
