@@ -10,6 +10,20 @@ printuse(){
 
 }
 
+setupenv(){
+	export PATH=$PATH:/$PWD/../host/usr/bin/
+	echo $PATH
+}
+
+builduboot(){
+	echo builduboot
+	cd ../uboot/
+	cp ../build/ubootconfig/defconfig .config
+	make ARCH=arm CROSS_COMPILE=arm-linux-
+	cp u-boot.bin ../image/
+	cp spl/u-boot-spl.bin ../image/
+	cd -
+}
 
 buildkernel(){
 	echo buildkernel
@@ -20,8 +34,8 @@ buildkernel(){
 	#make dtbs
 	#cp arch/arm/boot/dts/nuc972-evb.dtb ../image/
 
-	make uImage -j8
-	make modules -j8
+	make uImage -j8 CROSS_COMPILE=arm-linux-
+	make modules -j8 CROSS_COMPILE=arm-linux-
 
 	#cp ../image/970uimage /home/tftp/970uImage
 
@@ -64,14 +78,6 @@ buildkernel(){
 	cd -
 	./upload.sh ../image/boot.img $boardtype
 
-}
-builduboot(){
-	echo builduboot
-	cd ../uboot/
-	cp ../build/ubootconfig/defconfig .config
-	make ARCH=arm CROSS_COMPILE=../host/usr/bin/arm-linux-
-	cp u-boot.bin ../image/
-	cd -
 }
 
 buildrootfs(){
@@ -207,7 +213,7 @@ case $1 in
 	"fw")
 		buildfw;
 		;;
-	"all")
-		buildall
+	"env")
+		setupenv;
 		;;
 esac
