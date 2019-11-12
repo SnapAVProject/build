@@ -85,7 +85,7 @@ buildrootfs(){
 	cd ../nuc970_buildroot/
 	echo cp ../build/buildrootconfig/${boardtype}_buildroot_config .config
 	cp ../build/buildrootconfig/${boardtype}_buildroot_config .config
-	make BOARDTYPE=$boardtype SNAPAV_APP_VERSION=$app SNAPAV_DSP_VERSION=$dsp
+	make BOARDTYPE=$boardtype SNAPAV_APP_VERSION=$app SNAPAV_DSP_VERSION=$dsp -j5
 
 	#cd ../Rootfs/
 	#./buildjffs2img.sh
