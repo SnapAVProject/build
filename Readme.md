@@ -4,7 +4,7 @@
 ### 1.1 build buildroot to create cross_compile
 `./build.sh rootfs {boardtype} {appversion} {dspversion}`
 ### 1.2 config host softlink in up folder 
-`ln -s ../nuc970_buildroot/output/host ../host `
+`ln -s ./nuc970_buildroot/output/host ../host `
 ### 1.3 create image folder to save images
 `mkdir ../image`
 
