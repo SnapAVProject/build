@@ -1,4 +1,4 @@
-
+# bootstrap for the whole system
 
 
 function launch()
@@ -19,5 +19,4 @@ function launch()
 
     echo "Now the boardtype:${boardtype}"
     export BOARDTYPE=${boardtype}
-    cp build/kernelconfig/${BOARDTYPE}_config ${KERNEL_SRC}/.config
 }
