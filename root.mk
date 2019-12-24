@@ -11,6 +11,7 @@
 TARGET=fullbuild
 PWD=$(shell pwd)
 KERNEL_SRC=linux3.10
+ROOTFS_SRC=rootfs20190207
 
 $(shell mkdir -p image)
 
@@ -23,8 +24,11 @@ endif
 
 # By default, build the whole system
 all: $(TARGET)
+ifeq ($(BOARDTYPE), spa25)
+$(TARGET): uboot rootfs kernel app dirac
+else
 $(TARGET): uboot rootfs kernel app
-
+endif
 
 .PHONY:app
 app:
@@ -56,5 +60,13 @@ kernel:
 rootfs:
 	@echo '====== Building the Rootfs ======'
 	@echo $(PWD)
-	make -C rootfs20190207/ snapav51_defconfig
+	@cp build/buildrootconfig/${BOARDTYPE}_defconfig ${ROOTFS_SRC}/configs/${BOARDTYPE}_defconfig
+	make -C rootfs20190207/ ${BOARDTYPE}_defconfig
 	make -C rootfs20190207/
+
+###### Dirac ######
+.PHONY:dirac
+dirac:
+	@echo '====== Building the dirac ======'
+	@echo $(PWD)
+	make -C dirac/ -f Makefile.linux -j8
