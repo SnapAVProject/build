@@ -1,0 +1,15 @@
+baudrate=115200
+bootdelay=0
+ethact=emac
+dtbaddr=0x1E00000
+dtbflashaddr=0x700000
+dtblen=0x100000
+kerneladdr=0x7fc0
+kernelflashaddr=0x200000
+kernellen=0x300000
+loaddtb=nand read $dtbaddr  $dtbflashaddr $dtblen
+loadkernel=nand read $kerneladdr $kernelflashaddr $kernellen
+spiprobe=sf probe 0 18000000
+loadconfigs=setenv bootargs noinitrd ${ethmac} ${serial} root=/dev/mtdblock${rootpart} rw rootfstype=ext4 console=ttyS0,115200n8 init=/sbin/init mem=64M lpj=744448 rescue=0 mtdparts=nand0:2M(u-boot),4M(boot),4M(boot_ota),30M(rootfs),30M(rootfs_ota),-(userdata)
+rootpart=3
+bootcmd=run loadconfigs;run loadkernel;bootm $kerneladdr - $dtbaddr

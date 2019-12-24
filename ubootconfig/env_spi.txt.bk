@@ -1,0 +1,14 @@
+baudrate=115200
+bootdelay=1
+ethact=emac
+dtbaddr=0x1E00000
+dtbflashaddr=0x100000
+dtblen=0x100000
+kerneladdr=0x7fc0
+kernelflashaddr=0x180000
+kernellen=0x380000
+loaddtb=sf read $dtbaddr  $dtbflashaddr $dtblen
+loadkernel=sf read $kerneladdr $kernelflashaddr $kernellen
+spiprobe=sf probe 0 18000000
+bootcmd=run spiprobe;run loaddtb;run loadkernel;bootm $kerneladdr - $dtbaddr
+bootargs=root=/dev/ram0 console=ttyS0,115200n8 rdinit=/sbin/init mem=64M lpj=744448 mtdparts=spi0:0x100000@0x0(u-boot),0x80000@0x100000(dtb),0x380000@180000(kernel),-(rootfs)
