@@ -65,11 +65,10 @@ kernel:
 .PHONY:rootfs
 rootfs:
 	@echo '====== Building the Rootfs ======'
-	@echo $(PWD)
-	@ln -sf $(PWD)/tools $(HANSONGTOOLS)/package
+	@ln -sf $(PWD)/${TOOLS_SRC} $(HANSONGTOOLS)/package
 	@cp build/buildrootconfig/${BOARDTYPE}_defconfig ${ROOTFS_SRC}/configs/${BOARDTYPE}_defconfig
 	make -C rootfs20190207/ BR2_EXTERNAL=${PWD}/${HANSONGTOOLS} ${BOARDTYPE}_defconfig
-	make -C rootfs20190207/
+	make -C rootfs20190207/ HOSTCC=$(PWD)/prebuilt/arm9-nuvoton/usr/bin/arm-linux-gcc
 	@cp rootfs20190207/output/images/rootfs.squashfs image/rootfs.img
 
 ###### Dirac ######
