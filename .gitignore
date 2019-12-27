@@ -1,2 +1,4 @@
 *.zip
 *.dat
+*.img
+checksum.txt
