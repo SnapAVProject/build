@@ -51,8 +51,8 @@ uboot:
 kernel:
 	@echo '====== Building the Kernel ======'
 	@cp build/kernelconfig/${BOARDTYPE}_config ${KERNEL_SRC}/.config
-	make -n -C linux3.10/ uImage -j 8 CROSS_COMPILE=$(PWD)/prebuilt/arm9-nuvoton/usr/bin/arm-linux-
-	make -n -C linux3.10/ modules -j 8 CROSS_COMPILE=$(PWD)/prebuilt/arm9-nuvoton/usr/bin/arm-linux-
+	make -C linux3.10/ uImage -j 8 CROSS_COMPILE=$(PWD)/prebuilt/arm9-nuvoton/usr/bin/arm-linux-
+	make -C linux3.10/ modules -j 8 CROSS_COMPILE=$(PWD)/prebuilt/arm9-nuvoton/usr/bin/arm-linux-
 	bash build/package.sh kernel
 
 ###### Rootfs ######
