@@ -12,7 +12,13 @@ TARGET=fullbuild
 PWD=$(shell pwd)
 APP_SRC=app
 KERNEL_SRC=linux3.10
+TOOLS_SRC=tools
+
+# below is standard Linux fs layout
 ROOTFS_SRC=rootfs20190207
+# below is for Hansong-specific tools
+# in Linux rootfs
+HANSONGTOOLS=build/hsrootfs
 
 $(shell mkdir -p image)
 
@@ -60,8 +66,9 @@ kernel:
 rootfs:
 	@echo '====== Building the Rootfs ======'
 	@echo $(PWD)
+	@ln -sf $(PWD)/tools $(HANSONGTOOLS)/package
 	@cp build/buildrootconfig/${BOARDTYPE}_defconfig ${ROOTFS_SRC}/configs/${BOARDTYPE}_defconfig
-	make -C rootfs20190207/ ${BOARDTYPE}_defconfig
+	make -C rootfs20190207/ BR2_EXTERNAL=${PWD}/${HANSONGTOOLS} ${BOARDTYPE}_defconfig
 	make -C rootfs20190207/
 	@cp rootfs20190207/output/images/rootfs.squashfs image/rootfs.img
 
