@@ -1,0 +1,1 @@
+source "$BR2_EXTERNAL_HSTOOL_PATH/package/hsota/Config.in"
