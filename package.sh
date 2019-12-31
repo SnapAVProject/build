@@ -2,7 +2,7 @@
 
 
 PWD=`pwd`
-RELDIR="${PWD}/output"
+RELDIR="${PWD}/out/images"
 IMGDIR="${PWD}/image"
 KERNELIMG="${PWD}/linux3.10/arch/arm/boot/uImage"
 
@@ -31,6 +31,7 @@ function gen_md5sum()
 
 function zip_package_file()
 {
+    # zip -D would only zip the non-directory file!
     cd $RELDIR && zip -r $TARGET_PACKAGE ./
 }
 
@@ -62,8 +63,8 @@ function copy_image()
 function prepare_location()
 {
     if [ -d $RELDIR ] ; then
-        echo "remove the dir $RELDIR"
-        rm -rf $RELDIR
+        echo "remove the non-dir stuff under $RELDIR"
+        rm $RELDIR/*
     fi
 
     mkdir -p $RELDIR
