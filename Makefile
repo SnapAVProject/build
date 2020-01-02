@@ -1,5 +1,5 @@
 boardtype :=snapav51
-appversion :=102
+appversion :=106
 dspversion :=100
 deletedatabase :=false
 all:
