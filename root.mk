@@ -13,6 +13,7 @@ PWD=$(shell pwd)
 APP_SRC=app
 KERNEL_SRC=linux3.10
 TOOLS_SRC=tools
+OUTDIR=out
 
 # below is standard Linux fs layout
 ROOTFS_SRC=rootfs20190207
@@ -20,11 +21,10 @@ ROOTFS_SRC=rootfs20190207
 # in Linux rootfs
 HANSONGTOOLS=build/hsrootfs
 
-$(shell mkdir -p image)
+$(shell mkdir -p image $(OUTDIR))
 
 ifndef BOARDTYPE
-$(error You MUST choose correct board type.)
-else
+$(error You MUST choose correct board type.) else
 $(info keep going)
 endif
 
@@ -61,15 +61,24 @@ kernel:
 	make -C linux3.10/ modules -j 8 CROSS_COMPILE=$(PWD)/prebuilt/arm9-nuvoton/usr/bin/arm-linux-
 	bash build/package.sh kernel
 
+
+##### tools #####
+.PHONY:tools
+tools:
+	@echo "====== Building the tools... ======="
+	make -C tools/ CROSS_COMPILE=$(PWD)/prebuilt/arm9-nuvoton/usr/bin/arm-linux- TARGETDIR=${PWD}/${OUTDIR}
+#	make -C tools/ TARGETDIR=${PWD}/${OUTDIR} install
+
+#make -C rootfs20190207/ HOSTCC=$(PWD)/prebuilt/arm9-nuvoton/usr/bin/arm-linux-gcc HOSTCXX=$(PWD)/prebuilt/arm9-nuvoton/usr/bin/arm-linux-g++
 ###### Rootfs ######
 .PHONY:rootfs
 rootfs:
 	@echo '====== Building the Rootfs ======'
-	@ln -sf $(PWD)/${TOOLS_SRC} $(HANSONGTOOLS)/package
+#@ln -sf $(PWD)/${TOOLS_SRC} $(HANSONGTOOLS)/package
 	@cp build/buildrootconfig/${BOARDTYPE}_defconfig ${ROOTFS_SRC}/configs/${BOARDTYPE}_defconfig
-	make -C rootfs20190207/ BR2_EXTERNAL=${PWD}/${HANSONGTOOLS} ${BOARDTYPE}_defconfig
-	make -C rootfs20190207/ HOSTCC=$(PWD)/prebuilt/arm9-nuvoton/usr/bin/arm-linux-gcc
-	@cp rootfs20190207/output/images/rootfs.squashfs image/rootfs.img
+	make -C rootfs20190207/ O=${PWD}/${OUTDIR} ${BOARDTYPE}_defconfig
+	make -C rootfs20190207/ O=${PWD}/${OUTDIR} BR_NO_CHECK_HASH_FOR=linux-3.10.10.tar.xz
+	@cp ${OUTDIR}/images/rootfs.squashfs image/rootfs.img
 
 ###### Dirac ######
 .PHONY:dirac
@@ -88,5 +97,7 @@ release:
 
 ###### Just for Debug ######
 .PHONY:dbg
-dbg:
+dbg:mydbg
 	echo "Try the debug code here"
+mydbg:
+	echo "Mydbg"
