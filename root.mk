@@ -32,9 +32,9 @@ endif
 # By default, build the whole system
 all: $(TARGET)
 ifeq ($(BOARDTYPE), spa25)
-$(TARGET): uboot rootfs kernel app dirac
+$(TARGET): uboot rootfs kernel app tools dirac
 else
-$(TARGET): uboot rootfs kernel app
+$(TARGET): uboot rootfs kernel app tools
 endif
 
 .PHONY:app
@@ -67,26 +67,30 @@ kernel:
 tools:
 	@echo "====== Building the tools... ======="
 	make -C tools/ CROSS_COMPILE=$(PWD)/prebuilt/arm9-nuvoton/usr/bin/arm-linux- TARGETDIR=${PWD}/${OUTDIR}
-#	make -C tools/ TARGETDIR=${PWD}/${OUTDIR} install
 
-#make -C rootfs20190207/ HOSTCC=$(PWD)/prebuilt/arm9-nuvoton/usr/bin/arm-linux-gcc HOSTCXX=$(PWD)/prebuilt/arm9-nuvoton/usr/bin/arm-linux-g++
+
 ###### Rootfs ######
 .PHONY:rootfs
-rootfs:
+ifeq ($(BOARDTYPE), spa25)
+rootfs: tools dirac
+else
+rootfs: tools
+endif
 	@echo '====== Building the Rootfs ======'
 #@ln -sf $(PWD)/${TOOLS_SRC} $(HANSONGTOOLS)/package
 	@cp build/buildrootconfig/${BOARDTYPE}_defconfig ${ROOTFS_SRC}/configs/${BOARDTYPE}_defconfig
 	make -C rootfs20190207/ O=${PWD}/${OUTDIR} ${BOARDTYPE}_defconfig
-	make -C rootfs20190207/ O=${PWD}/${OUTDIR} BR_NO_CHECK_HASH_FOR=linux-3.10.10.tar.xz
-	@cp ${OUTDIR}/images/rootfs.squashfs image/rootfs.img
+	make -C rootfs20190207/ O=${PWD}/${OUTDIR} BR_NO_CHECK_HASH_FOR=linux-3.10.10.tar.xz -j8
+	@cp $(PWD)/prebuilt/arm9-nuvoton/usr/arm-buildroot-linux-gnueabi/lib/libstdc++.so.6.0.24 ${PWD}/${OUTDIR}/target/lib/
+	cd ${OUTDIR}/target/lib/ && ln -sf libstdc++.so.6.0.24 libstdc++.so.6 && ln -sf libstdc++.so.6.0.24 libstdc++.so
+#	@cp ${OUTDIR}/images/rootfs.squashfs image/rootfs.img
 
 ###### Dirac ######
 .PHONY:dirac
 dirac:
 	@echo '====== Building the dirac ======'
 	@echo $(PWD)
-	make -C dirac/ -f Makefile.linux -j8
-
+	make -C dirac/ -f Makefile.linux -j8 TARGETDIR=${PWD}/${OUTDIR}
 
 ###### SW Release ######
 .PHONY:release

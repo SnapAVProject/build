@@ -8,11 +8,14 @@ KERNELIMG="${PWD}/linux3.10/arch/arm/boot/uImage"
 
 TARGET_PACKAGE=$BOARDTYPE-`date '+%Y-%m-%d'`.zip
 
+ROOTFS_RAWIMG="rootfs.squashfs"
+ROOTFS_IMG="rootfs.img"
+
 echo $RELDIR
 
 function plot_final_release_info()
 {
-    echo -e "\n\nCongratulations!\n Package is created,\n check it under $RELDIR:"
+    echo -e "\n\nCongratulations!\n Package is created from $RELDIR.\n Enjoy it!"
     echo '==========================='
     echo " Package: $TARGET_PACKAGE"
     echo '==========================='
@@ -32,7 +35,8 @@ function gen_md5sum()
 function zip_package_file()
 {
     # zip -D would only zip the non-directory file!
-    cd $RELDIR && zip -r $TARGET_PACKAGE ./
+    echo "zip -D $TARGET_PACKAGE ./"
+    cd $RELDIR && zip -r $TARGET_PACKAGE ./ && mv $TARGET_PACKAGE ../
 }
 
 function copy_image()
@@ -50,6 +54,14 @@ function copy_image()
         rm $RELDIR/970image
     fi
 
+    if [ -e $RELDIR/rootfs.tar ] ; then
+        rm $RELDIR/rootfs.tar
+    fi
+
+    if [ -e $RELDIR/$ROOTFS_RAWIMG ] ; then
+        mv $RELDIR/$ROOTFS_RAWIMG $RELDIR/$ROOTFS_IMG
+    fi
+
     echo $BOARDTYPE >$RELDIR/boardtype
     # TODO - below SHOULD be done via a config-able way
     echo 'true' > $RELDIR/deleteDb.config
@@ -62,12 +74,10 @@ function copy_image()
 
 function prepare_location()
 {
-    if [ -d $RELDIR ] ; then
-        echo "remove the non-dir stuff under $RELDIR"
-        rm $RELDIR/*
+    if [ ! -d $RELDIR ] ; then
+        echo "Error: failed to find $RELDIR"
+        exit 1
     fi
-
-    mkdir -p $RELDIR
 }
 
 function release_package()
@@ -98,7 +108,7 @@ case "$1" in
     gen_bootimg
   ;;
   'release')
-    echo 'will run'
+    echo 'packing the release files...'
     release_package
   ;;
 esac
