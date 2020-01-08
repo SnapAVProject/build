@@ -40,7 +40,8 @@ endif
 .PHONY:app
 app:
 	@echo '====== Building the application ======'
-	make -C $(APP_SRC) -f Makefile.linux
+	make -C $(APP_SRC) TARGETDIR=${PWD}/${OUTDIR} -f Makefile.linux
+	make -C $(APP_SRC) TARGETDIR=${PWD}/${OUTDIR} -f Makefile.linux install
 
 ###### uboot ######
 
@@ -48,7 +49,7 @@ app:
 uboot:
 	@echo '====== Building the uboot ======'
 	@cp build/ubootconfig/defconfig uboot/.config
-	make -C uboot/ ARCH=arm CROSS_COMPILE=$(PWD)/prebuilt/arm9-nuvoton/usr/bin/arm-linux-
+	make -C uboot/ ARCH=arm CROSS_COMPILE=$(PWD)/prebuilt/arm9-nuvoton/usr/bin/arm-linux- -j4
 	@cp uboot/u-boot.bin image/
 
 ###### Kernel ######
@@ -57,8 +58,8 @@ uboot:
 kernel:
 	@echo '====== Building the Kernel ======'
 	@cp build/kernelconfig/${BOARDTYPE}_config ${KERNEL_SRC}/.config
-	make -C linux3.10/ uImage -j 8 CROSS_COMPILE=$(PWD)/prebuilt/arm9-nuvoton/usr/bin/arm-linux-
-	make -C linux3.10/ modules -j 8 CROSS_COMPILE=$(PWD)/prebuilt/arm9-nuvoton/usr/bin/arm-linux-
+	make -C linux3.10/ uImage -j8 CROSS_COMPILE=$(PWD)/prebuilt/arm9-nuvoton/usr/bin/arm-linux-
+	make -C linux3.10/ modules -j8 CROSS_COMPILE=$(PWD)/prebuilt/arm9-nuvoton/usr/bin/arm-linux-
 	bash build/package.sh kernel
 
 
@@ -79,7 +80,10 @@ rootfs:
 	make -C rootfs20190207/ O=${PWD}/${OUTDIR} BR_NO_CHECK_HASH_FOR=linux-3.10.10.tar.xz -j8
 	@cp $(PWD)/prebuilt/arm9-nuvoton/usr/arm-buildroot-linux-gnueabi/lib/libstdc++.so.6.0.24 ${PWD}/${OUTDIR}/target/lib/
 	cd ${OUTDIR}/target/lib/ && ln -sf libstdc++.so.6.0.24 libstdc++.so.6 && ln -sf libstdc++.so.6.0.24 libstdc++.so
-#	@cp ${OUTDIR}/images/rootfs.squashfs image/rootfs.img
+	@cp $(PWD)/prebuilt/arm9-nuvoton/usr/arm-buildroot-linux-gnueabi/sysroot/usr/lib/libminiupnpc.so.2.0 ${PWD}/${OUTDIR}/target/usr/lib/
+	cd ${OUTDIR}/target/usr/lib/ && ln -sf libminiupnpc.so.2.0 libminiupnpc.so.16 && ln -sf libminiupnpc.so.16 libminiupnpc.so
+	@mkdir -p ${OUTDIR}/target/media/userdata/
+	@ln -sf /media/userdata/interfaces ${OUTDIR}/target/etc/network/interfaces
 
 
 ###### web pages ######
