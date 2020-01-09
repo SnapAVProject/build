@@ -70,6 +70,18 @@ function copy_image()
     echo 'echo $0' >> $RELDIR/setup.sh
     echo 'cp S99setbootflag /media/userdata/' >> $RELDIR/setup.sh
     echo 'exit;' >> $RELDIR/setup.sh
+    chmod 755 $RELDIR/setup.sh
+
+    echo '#!/bin/sh' > $RELDIR/S99setbootflag
+    echo 'case "$1" in' >> $RELDIR/S99setbootflag
+    echo '  start)' >> $RELDIR/S99setbootflag
+    echo '	echo "Starting setbootflag..."' >> $RELDIR/S99setbootflag
+    echo '	/usr/bin/ota_upgrade -s' >> $RELDIR/S99setbootflag
+    echo '	;;' >> $RELDIR/S99setbootflag
+    echo '  *)' >> $RELDIR/S99setbootflag
+    echo '	exit 1' >> $RELDIR/S99setbootflag
+    echo 'esac' >> $RELDIR/S99setbootflag
+    chmod 755 $RELDIR/S99setbootflag
 }
 
 function prepare_location()
