@@ -78,6 +78,10 @@ function prepare_location()
         echo "Error: failed to find $RELDIR"
         exit 1
     fi
+
+    if [ -e $RELDIR/checksum.txt ] ; then
+        rm $RELDIR/checksum.txt
+    fi
 }
 
 function release_package()
@@ -92,7 +96,7 @@ function release_package()
 
 function gen_bootimg()
 {
-    echo 'Hello world'
+    echo 'Packing the kernel image...'
     cp ${KERNELIMG} ${IMGDIR}
     cp ${KERNELIMG} ${IMGDIR}/boot.img
     sizeo=`du $IMGDIR/boot.img -b | awk '{print $1}'`
