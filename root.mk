@@ -96,14 +96,13 @@ web:
 	install -D --mode=0644 ${PWD}/web/php.ini  ${PWD}/${OUTDIR}/target/etc/
 
 
-
-
 ###### Dirac ######
 .PHONY:dirac
 dirac:
 	@echo '====== Building the dirac ======'
 	@echo $(PWD)
 	make -C dirac/ -f Makefile.linux -j8 TARGETDIR=${PWD}/${OUTDIR}
+	make -C dirac/ -f Makefile.linux -j8 TARGETDIR=${PWD}/${OUTDIR} install
 
 ###### SW Release ######
 .PHONY:release
