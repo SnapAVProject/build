@@ -8,11 +8,14 @@ KERNELIMG="${PWD}/linux3.10/arch/arm/boot/uImage"
 
 TARGET_PACKAGE=$BOARDTYPE-`date '+%Y-%m-%d'`.zip
 
+ROOTFS_RAWIMG="rootfs.squashfs"
+ROOTFS_IMG="rootfs.img"
+
 echo $RELDIR
 
 function plot_final_release_info()
 {
-    echo -e "\n\nCongratulations!\n Package is created,\n check it under $RELDIR:"
+    echo -e "\n\nCongratulations!\n Package is created from $RELDIR.\n Enjoy it!"
     echo '==========================='
     echo " Package: $TARGET_PACKAGE"
     echo '==========================='
@@ -32,7 +35,8 @@ function gen_md5sum()
 function zip_package_file()
 {
     # zip -D would only zip the non-directory file!
-    cd $RELDIR && zip -r $TARGET_PACKAGE ./
+    echo "zip -D $TARGET_PACKAGE ./"
+    cd $RELDIR && zip -r $TARGET_PACKAGE ./ && mv $TARGET_PACKAGE ../
 }
 
 function copy_image()
@@ -50,6 +54,14 @@ function copy_image()
         rm $RELDIR/970image
     fi
 
+    if [ -e $RELDIR/rootfs.tar ] ; then
+        rm $RELDIR/rootfs.tar
+    fi
+
+    if [ -e $RELDIR/$ROOTFS_RAWIMG ] ; then
+        mv $RELDIR/$ROOTFS_RAWIMG $RELDIR/$ROOTFS_IMG
+    fi
+
     echo $BOARDTYPE >$RELDIR/boardtype
     # TODO - below SHOULD be done via a config-able way
     echo 'true' > $RELDIR/deleteDb.config
@@ -58,16 +70,30 @@ function copy_image()
     echo 'echo $0' >> $RELDIR/setup.sh
     echo 'cp S99setbootflag /media/userdata/' >> $RELDIR/setup.sh
     echo 'exit;' >> $RELDIR/setup.sh
+    chmod 755 $RELDIR/setup.sh
+
+    echo '#!/bin/sh' > $RELDIR/S99setbootflag
+    echo 'case "$1" in' >> $RELDIR/S99setbootflag
+    echo '  start)' >> $RELDIR/S99setbootflag
+    echo '	echo "Starting setbootflag..."' >> $RELDIR/S99setbootflag
+    echo '	/usr/bin/ota_upgrade -s' >> $RELDIR/S99setbootflag
+    echo '	;;' >> $RELDIR/S99setbootflag
+    echo '  *)' >> $RELDIR/S99setbootflag
+    echo '	exit 1' >> $RELDIR/S99setbootflag
+    echo 'esac' >> $RELDIR/S99setbootflag
+    chmod 755 $RELDIR/S99setbootflag
 }
 
 function prepare_location()
 {
-    if [ -d $RELDIR ] ; then
-        echo "remove the non-dir stuff under $RELDIR"
-        rm $RELDIR/*
+    if [ ! -d $RELDIR ] ; then
+        echo "Error: failed to find $RELDIR"
+        exit 1
     fi
 
-    mkdir -p $RELDIR
+    if [ -e $RELDIR/checksum.txt ] ; then
+        rm $RELDIR/checksum.txt
+    fi
 }
 
 function release_package()
@@ -82,7 +108,7 @@ function release_package()
 
 function gen_bootimg()
 {
-    echo 'Hello world'
+    echo 'Packing the kernel image...'
     cp ${KERNELIMG} ${IMGDIR}
     cp ${KERNELIMG} ${IMGDIR}/boot.img
     sizeo=`du $IMGDIR/boot.img -b | awk '{print $1}'`
@@ -98,7 +124,7 @@ case "$1" in
     gen_bootimg
   ;;
   'release')
-    echo 'will run'
+    echo 'packing the release files...'
     release_package
   ;;
 esac
