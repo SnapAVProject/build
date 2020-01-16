@@ -24,18 +24,25 @@ HANSONGTOOLS=build/hsrootfs
 $(shell mkdir -p image $(OUTDIR))
 
 ifndef BOARDTYPE
-$(error You MUST choose correct board type.) else
+$(error You MUST choose correct board type.) 
+else
 $(info keep going)
 endif
 
 
-# By default, build the whole system
+# By default, build the whole system, release type
 all: $(TARGET)
 ifeq ($(BOARDTYPE), spa25)
 $(TARGET): uboot rootfs kernel app tools web dirac
 else
 $(TARGET): uboot rootfs kernel app tools web
 endif
+
+
+## debug
+.PHONY:debug
+debug:
+	echo $(BAD)
 
 .PHONY:app
 app:
