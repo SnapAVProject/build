@@ -3,3 +3,5 @@
 *.img
 checksum.txt
 boardtype
+deleteDb.config
+
