@@ -33,9 +33,9 @@ endif
 # By default, build the whole system, release type
 all: $(TARGET)
 ifeq ($(BOARDTYPE), spa25)
-$(TARGET): uboot rootfs kernel app tools web dirac
+$(TARGET): uboot rootfs kernel app tools web dirac release
 else
-$(TARGET): uboot rootfs kernel app tools web
+$(TARGET): uboot rootfs kernel app tools web release
 endif
 
 
