@@ -13,6 +13,7 @@ ROOTFS_IMG="rootfs.img"
 
 echo $RELDIR
 
+
 function plot_final_release_info()
 {
     echo -e "\n\nCongratulations!\n Package is created from $RELDIR.\n Enjoy it!"
@@ -37,6 +38,11 @@ function zip_package_file()
     # zip -D would only zip the non-directory file!
     echo "zip -D $TARGET_PACKAGE ./"
     cd $RELDIR && zip -r $TARGET_PACKAGE ./ && mv $TARGET_PACKAGE ../
+
+    # Try archive it if possible
+    if [ `hostname` == 'sw1' ] ; then
+        cp $TARGET_PACKAGE /opt/autocicd/dailybuild/
+    fi
 }
 
 function copy_image()
