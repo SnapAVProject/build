@@ -41,7 +41,7 @@ function zip_package_file()
 
     # Try archive it if possible
     if [ `hostname` == 'sw1' ] ; then
-        cp $TARGET_PACKAGE /opt/autocicd/dailybuild/
+        cp $RELDIR/../$TARGET_PACKAGE /opt/autocicd/dailybuild/
     fi
 }
 
