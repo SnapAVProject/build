@@ -6,6 +6,9 @@ RELDIR="${PWD}/out/images"
 IMGDIR="${PWD}/image"
 KERNELIMG="${PWD}/linux3.10/arch/arm/boot/uImage"
 
+GREEN='\033[0;32m'
+STD='\033[0;0m'
+
 TARGET_PACKAGE=$BOARDTYPE-`date '+%Y-%m-%d'`.zip
 
 ROOTFS_RAWIMG="rootfs.squashfs"
@@ -18,7 +21,7 @@ function plot_final_release_info()
 {
     echo -e "\n\nCongratulations!\n Package is created from $RELDIR.\n Enjoy it!"
     echo '==========================='
-    echo " Package: $TARGET_PACKAGE"
+    echo -e "Package: ${GREEN}$TARGET_PACKAGE${STD}"
     echo '==========================='
     sleep 3
 }
