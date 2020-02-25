@@ -4,7 +4,7 @@
 # to select corrrect target product
 
 # sample:
-# launch snapav51 [appversion dspversion]
+# launch spa25 [appversion dspversion]
 # make              - build the whole system
 # make kernel       - build the kernel
 
@@ -14,6 +14,9 @@ APP_SRC=app
 KERNEL_SRC=linux3.10
 TOOLS_SRC=tools
 OUTDIR=out
+
+GREEN='\033[0;32m'
+STD='\033[0;0m'
 
 # below is standard Linux fs layout
 ROOTFS_SRC=rootfs20190207
@@ -33,9 +36,9 @@ endif
 # By default, build the whole system, release type
 all: $(TARGET)
 ifeq ($(BOARDTYPE), spa25)
-$(TARGET): uboot rootfs kernel app tools web dirac
+$(TARGET): uboot rootfs kernel app tools web dirac release
 else
-$(TARGET): uboot rootfs kernel app tools web
+$(TARGET): uboot rootfs kernel app tools web release
 endif
 
 

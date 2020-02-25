@@ -6,6 +6,9 @@ RELDIR="${PWD}/out/images"
 IMGDIR="${PWD}/image"
 KERNELIMG="${PWD}/linux3.10/arch/arm/boot/uImage"
 
+GREEN='\033[0;32m'
+STD='\033[0;0m'
+
 TARGET_PACKAGE=$BOARDTYPE-`date '+%Y-%m-%d'`.zip
 
 ROOTFS_RAWIMG="rootfs.squashfs"
@@ -13,11 +16,12 @@ ROOTFS_IMG="rootfs.img"
 
 echo $RELDIR
 
+
 function plot_final_release_info()
 {
     echo -e "\n\nCongratulations!\n Package is created from $RELDIR.\n Enjoy it!"
     echo '==========================='
-    echo " Package: $TARGET_PACKAGE"
+    echo -e "Package: ${GREEN}$TARGET_PACKAGE${STD}"
     echo '==========================='
     sleep 3
 }
@@ -37,6 +41,11 @@ function zip_package_file()
     # zip -D would only zip the non-directory file!
     echo "zip -D $TARGET_PACKAGE ./"
     cd $RELDIR && zip -r $TARGET_PACKAGE ./ && mv $TARGET_PACKAGE ../
+
+    # Try archive it if possible
+    if [ `hostname` == 'sw1' ] ; then
+        cp $RELDIR/../$TARGET_PACKAGE /opt/autocicd/dailybuild/
+    fi
 }
 
 function copy_image()
