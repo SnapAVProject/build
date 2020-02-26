@@ -18,7 +18,7 @@ function plot_products_list()
 {
     local allproducts
 
-    allproducts=`find -L $1 -type f| cut -d '/' -f 3|cut -d '_' -f 1`
+    allproducts=`find -L $1 -type f| cut -d '/' -f 3|cut -d '_' -f 1 |grep -v 'snapav'`
     for c in ${allproducts} ; do
         add_product_combo ${c}
     done

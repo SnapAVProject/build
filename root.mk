@@ -97,13 +97,14 @@ rootfs:
 
 
 ###### web pages ######
-
+# NOTE - add a simple different brand WEB dispatching method.
 .PHONY:web
 web:
 	cp -rf ${PWD}/web/src/*  ${PWD}/${OUTDIR}/target/usr/html
 	install -D --mode=0755 ${PWD}/web/S50nginx  ${PWD}/${OUTDIR}/target/etc/init.d/
 	install -D --mode=0644 ${PWD}/web/nginx.conf  ${PWD}/${OUTDIR}/target/etc/nginx/
 	install -D --mode=0644 ${PWD}/web/php.ini  ${PWD}/${OUTDIR}/target/etc/
+	make -C web/ TARGETDIR=${PWD}/${OUTDIR}
 
 
 ###### Dirac ######
