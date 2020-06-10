@@ -94,6 +94,7 @@ rootfs:
 	cd ${OUTDIR}/target/usr/lib/ && ln -sf libminiupnpc.so.2.0 libminiupnpc.so.16 && ln -sf libminiupnpc.so.16 libminiupnpc.so
 	@mkdir -p ${OUTDIR}/target/media/userdata/
 	@ln -sf /media/userdata/interfaces ${OUTDIR}/target/etc/network/interfaces
+	@ln -sf /media/userdata/localtime ${OUTDIR}/target/etc/localtime
 
 
 ###### web pages ######
