@@ -58,6 +58,7 @@ buildkernel(){
 
 
 	cat  arch/arm/boot/uImage > ../image/boot.img
+	if [ 1 -eq 0 ] ;then 
 	sizeo=`du ../image/boot.img -b | awk '{print $1}'`
 	echo $sizeo
 	size=`expr 4 \* 1024 \* 1024 - $sizeo`
@@ -75,8 +76,11 @@ buildkernel(){
 	fi
 	rm ../image/boot.img.tmp
 
+	fi
+
 	cd -
 	./upload.sh ../image/boot.img $boardtype
+	cp ../image/boot.img /home/tftp/ 
 
 }
 
@@ -85,7 +89,7 @@ buildrootfs(){
 	cd ../nuc970_buildroot/
 	echo cp ../build/buildrootconfig/${boardtype}_buildroot_config .config
 	cp ../build/buildrootconfig/${boardtype}_buildroot_config .config
-	make BOARDTYPE=$boardtype SNAPAV_APP_VERSION=$app SNAPAV_DSP_VERSION=$dsp -j5
+	make BOARDTYPE=$boardtype SNAPAV_APP_VERSION=$app SNAPAV_DSP_VERSION=$dsp -j13
 
 	#cd ../Rootfs/
 	#./buildjffs2img.sh
