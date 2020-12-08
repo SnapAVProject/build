@@ -3,9 +3,8 @@ echo $0
 cp S99setbootflag /media/userdata/
 
 #which nandwrite
-#checkfstype=`./fw_printenv -c ./fw_env.config  | grep fstype=squashfs, | wc -l`
-checkfstype=`df -T | grep root | awk '{print $2}'`
-if [ "$checkfstype" = "squashfs"  ] ;then 
+checkfstype=`./fw_printenv -c ./fw_env.config  | grep fstype=squashfs | wc -l`
+if [ $checkfstype != 0  ] ;then 
 	# if $? == 0 means that there is no nandwrite tool ,it is	old rootfs
 	part=`cat /proc/cmdline | cut -d ' ' -f 4`
 	if [ $part = "root=/dev/mtdblock4" ] ;then
@@ -23,7 +22,7 @@ if [ "$checkfstype" = "squashfs"  ] ;then
 		./nandwrite -p /dev/mtd4 ./rootfs.img
 	fi
 	ln -s fw_printenv fw_setenv
-	./fw_setenv fstype squashfs,jffs2 -c ./fw_env.config
+	./fw_setenv fstype jffs2 -c ./fw_env.config
 
 fi
 

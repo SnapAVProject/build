@@ -13,6 +13,9 @@ printuse(){
 setupenv(){
 	export PATH=$PATH:/$PWD/../host/usr/bin/
 	echo $PATH
+	if [ ! -d ../image/ ];then
+		mkdir ../image/
+	fi
 }
 
 builduboot(){
@@ -79,8 +82,9 @@ buildkernel(){
 	fi
 
 	cd -
-	./upload.sh ../image/boot.img $boardtype
-	cp ../image/boot.img /home/tftp/ 
+	cp ../image/boot.img fw/snapav/snapav-firmware/boot.img
+	#./upload.sh ../image/boot.img $boardtype
+	#cp ../image/boot.img /home/tftp/ 
 
 }
 
@@ -122,9 +126,8 @@ buildbootflag(){
 	cat flag.img > ../image/flag.img
 	fi
 	rm flag.img
-
-
 }
+
 buildbootloader() {
 	cat ../image/u-boot-spl.bin > ../image/bootloader.img
 	sizeo=`du ../image/bootloader.img -b | awk '{print $1}'`
@@ -165,7 +168,8 @@ buildbootloader() {
 
 }
 buildfw(){
-	echo build fw
+echo build fw
+if [ 0 -eq 1 ];then
 	if [ $boardtype = 'snapav2d' ];then
 		cd ./fw/snapav/
 	elif [ $boardtype = 'snapav8d' ];then
@@ -177,6 +181,9 @@ buildfw(){
 	elif [ $boardtype = 'snapav51' ];then
 		cd ./fw/snapav51/
 	fi
+else 
+	cd ./fw/snapav/
+fi
 	echo $dsp > snapav-firmware/deleteDb.config
 
 	./create-update-firmware.sh $app
