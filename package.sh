@@ -70,7 +70,12 @@ function copy_image()
     if [ -e $RELDIR/$ROOTFS_RAWIMG ] ; then
         mv $RELDIR/$ROOTFS_RAWIMG $RELDIR/$ROOTFS_IMG
     fi
-
+    if [ -e $RELDIR/rootfs.jffs2 ] ; then
+        rm $RELDIR/rootfs.jffs2
+    fi
+    if [ -e $RELDIR/u-boot.bin ] ; then
+		rm $RELDIR/u-boot.bin
+    fi
     echo $BOARDTYPE >$RELDIR/boardtype
     # TODO - below SHOULD be done via a config-able way
     echo 'true' > $RELDIR/deleteDb.config
