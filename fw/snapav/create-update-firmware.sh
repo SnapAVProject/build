@@ -19,6 +19,6 @@ cd -
 echo $model > snapav-firmware/boardtype
 
 zip -r $fwname.dat $dir
-echo "cp $fwname.dat /usr/share/nginx/html/snapav8d/"
-cp $fwname.dat /usr/share/nginx/html/snapav8d/
+#echo "cp $fwname.dat /usr/share/nginx/html/snapav8d/"
+#cp $fwname.dat /usr/share/nginx/html/snapav8d/
 mv $fwname.dat ../
