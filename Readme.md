@@ -1,6 +1,5 @@
 # build step
-## 1 first build 
-... only need to do once 
+## 1 first build, only need to do once 
 ### 1.1 build buildroot to create cross_compile
 `./build.sh rootfs {boardtype} {appversion} {dspversion}`
 ### 1.2 config host softlink in up folder 
