@@ -91,6 +91,11 @@ buildkernel(){
 buildrootfs(){
 	echo buildrootfs
 	cd ../nuc970_buildroot/
+
+	echo "============ checking out web update ================"
+	git submodule update --init --recursive
+	echo "============ web checking finish     ================"
+
 	echo cp ../build/buildrootconfig/${boardtype}_buildroot_config .config
 	cp ../build/buildrootconfig/${boardtype}_buildroot_config .config
 	make BOARDTYPE=$boardtype SNAPAV_APP_VERSION=$app SNAPAV_DSP_VERSION=$dsp -j13
