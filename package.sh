@@ -11,7 +11,7 @@ STD='\033[0;0m'
 
 TARGET_PACKAGE=$BOARDTYPE-`date '+%Y-%m-%d'`.zip
 
-ROOTFS_RAWIMG="rootfs.squashfs"
+ROOTFS_RAWIMG="rootfs.jffs2"
 ROOTFS_IMG="rootfs.img"
 
 echo $RELDIR
@@ -70,9 +70,7 @@ function copy_image()
     if [ -e $RELDIR/$ROOTFS_RAWIMG ] ; then
         mv $RELDIR/$ROOTFS_RAWIMG $RELDIR/$ROOTFS_IMG
     fi
-    if [ -e $RELDIR/rootfs.jffs2 ] ; then
-        rm $RELDIR/rootfs.jffs2
-    fi
+
     if [ -e $RELDIR/u-boot.bin ] ; then
 		rm $RELDIR/u-boot.bin
     fi
@@ -83,6 +81,9 @@ function copy_image()
     echo '#!/bin/sh' > $RELDIR/setup.sh
     echo 'echo $0' >> $RELDIR/setup.sh
     echo 'cp S99setbootflag /media/userdata/' >> $RELDIR/setup.sh
+	cp build/fw_printenv out/images/fw_setenv
+	cp build/fw_env.config out/images/
+	echo './fw_setenv fstype squashfs,jffs2 -c ./fw_env.config' >> $RELDIR/setup.sh
     echo 'exit;' >> $RELDIR/setup.sh
     chmod 755 $RELDIR/setup.sh
 
