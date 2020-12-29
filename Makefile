@@ -20,14 +20,16 @@ else ifeq ($(boardtype), snapav8d)
 else ifeq ($(boardtype), snapav2d)
 	apptype:= "CONFIG+=SNAPAV_TWO"
 	rootfspath:=hs_rootfs
-else 
+else ifeq ($(boardtype), snapav51)
 	apptype:= "CONFIG+=SNAPAV_FIVENONE"
 	app:=snapavapp51
 	appsrc:=snapavapp5.1
 	appproname:=snapavapp5.1
+else
+	echo "boardtype error !!"
+	exit ;
 endif
 
-apptype:=CONFIG+=SNAPAV_SIXTEEN
 
 all: app 
 	echo ${boardtype}
@@ -49,12 +51,15 @@ toolchain:
 	if [ -d  ../nuc970_buildroot/output/target/etc/network/ ] ;then \
 		cp ../nuc970_buildroot/board/nuvoton/hs_rootfs_common/etc/network/interfaces.bk ../nuc970_buildroot/output/target/etc/network/interfaces ;\
 	fi
-	./build.sh rootfs snapav8d 100 100
+	./build.sh rootfs snapav51 100 100
 	if [ -h ../host ];then rm ../host ;fi || true
 	ln -s ./nuc970_buildroot/output/host ../host
 
 app:
-	cd ../$(appsrc)/;qmake -makefile $(appproname).pro -o Makefile $(apptype) && make -j24;cp $(app) ../nuc970_buildroot/board/nuvoton/$(rootfspath)/root/snapav/;cd -
+	cd ../$(appsrc)/;qmake -makefile $(appproname).pro -o Makefile $(apptype) 
+	make -C ../$(appsrc)/ -f Makefile -j24
+	arm-linux-strip ../$(appsrc)/$(app) 
+	cp ../$(appsrc)/$(app) ../nuc970_buildroot/board/nuvoton/$(rootfspath)/root/snapav/
 
 sync:
 
