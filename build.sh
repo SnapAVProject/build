@@ -94,28 +94,33 @@ buildrootfs(){
 	echo "============ web checking finish     ================"
 	if [ $boardtype = 'snapav2d'  ];then
 	 if [ -d ../web/snapav_2d_web ];then 
-		 cp ../web/snapav_2d_web	 ../nuc970_buildroot/board/nuvoton/hs_rootfs/usr/html/  -a 
-		 rm ../nuc970_buildroot/board/nuvoton/hs_rootfs/usr/html/snapav_2d_web/.git	
+		 mkdir ../nuc970_buildroot/board/nuvoton/hs_rootfs/usr/html/snapav_2d_web
+		 cp ../web/snapav_2d_web/*	 ../nuc970_buildroot/board/nuvoton/hs_rootfs/usr/html/snapav_2d_web/  -a 
+		 rm ../nuc970_buildroot/board/nuvoton/hs_rootfs/usr/html/snapav_2d_web/.git -rf
 	 fi
 	elif [ $boardtype = 'snapav8d' ];then
 	 if [ -d ../web/snapav_8d_web ];then 
-	 	cp ../web/snapav_8d_web ../nuc970_buildroot/board/nuvoton/hs_rootfs_8d/usr/html/ -a
-		 rm ../nuc970_buildroot/board/nuvoton/hs_rootfs_8d/usr/html/snapav_8d_web/.git	
+		 mkdir ../nuc970_buildroot/board/nuvoton/hs_rootfs_8d/usr/html/snapav_8d_web
+	 	cp ../web/snapav_8d_web/* ../nuc970_buildroot/board/nuvoton/hs_rootfs_8d/usr/html/snapav_8d_web/ -a
+		 rm ../nuc970_buildroot/board/nuvoton/hs_rootfs_8d/usr/html/snapav_8d_web/.git -rf	
 	fi
 	elif [ $boardtype = 'snapav12d' ];then
 	 if [ -d ../web/snapav_12d_web ];then 
-	 	cp ../web/snapav_12d_web ../nuc970_buildroot/board/nuvoton/hs_rootfs_12d/usr/html/  -a
-		 rm ../nuc970_buildroot/board/nuvoton/hs_rootfs_12d/usr/html/snapav_12d_web/.git	
+		 mkdir ../nuc970_buildroot/board/nuvoton/hs_rootfs_12d/usr/html/snapav_12d_web
+	 	cp ../web/snapav_12d_web/* ../nuc970_buildroot/board/nuvoton/hs_rootfs_12d/usr/html/snapav_12d_web/  -a
+		 rm ../nuc970_buildroot/board/nuvoton/hs_rootfs_12d/usr/html/snapav_12d_web/.git -rf	
  	 fi
 	elif [ $boardtype = 'snapav16d' ];then
 	 if [ -d ../web/snapav_16d_web ];then 
-	  	cp ../web/snapav_16d_web  ../nuc970_buildroot/board/nuvoton/hs_rootfs_16d/usr/html/  -a
-		 rm ../nuc970_buildroot/board/nuvoton/hs_rootfs_16d/usr/html/snapav_16d_web/.git	
+		 mkdir ../nuc970_buildroot/board/nuvoton/hs_rootfs_16d/usr/html/snapav_16d_web
+	  	cp ../web/snapav_16d_web/*  ../nuc970_buildroot/board/nuvoton/hs_rootfs_16d/usr/html/snapav_16d_web/  -a
+		 rm ../nuc970_buildroot/board/nuvoton/hs_rootfs_16d/usr/html/snapav_16d_web/.git -rf
      fi
 	elif [ $boardtype = 'snapav51' ];then
 	 if [ -d ../web/snapav_5.1_web ];then 
-	  	cp ../web/snapav_5.1_web  ../nuc970_buildroot/board/nuvoton/hs_rootfs_51/usr/html/  -a
-		 rm ../nuc970_buildroot/board/nuvoton/hs_rootfs_51/usr/html/snapav_5.1_web/.git	
+		 mkdir ../nuc970_buildroot/board/nuvoton/hs_rootfs_51/usr/html/snapav_5.1_web
+	  	cp ../web/snapav_5.1_web/*  ../nuc970_buildroot/board/nuvoton/hs_rootfs_51/usr/html/snapav_5.1_web/  -a
+		 rm ../nuc970_buildroot/board/nuvoton/hs_rootfs_51/usr/html/snapav_5.1_web/.git	-rf
  	 fi
 	else
 		echo "unsupport  board $boardtype"
@@ -126,7 +131,7 @@ buildrootfs(){
 
 	echo cp ../build/buildrootconfig/${boardtype}_buildroot_config .config
 	cp ../build/buildrootconfig/${boardtype}_buildroot_config .config
-	make BOARDTYPE=$boardtype SNAPAV_APP_VERSION=$app SNAPAV_DSP_VERSION=$dsp -j13
+	make BOARDTYPE=$boardtype SNAPAV_APP_VERSION=$app SNAPAV_DSP_VERSION=$dsp -j24
 
 	#cd ../Rootfs/
 	#./buildjffs2img.sh
