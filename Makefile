@@ -1,6 +1,4 @@
 boardtype :=snapav51
-appversion :=108
-dspversion :=100
 deletedatabase :=false
 
 app:=snapavapp
@@ -8,18 +6,24 @@ rootfspath:=hs_rootfs_51
 appsrc:=snapav_app
 appproname:=snapavapp
 
+grepname=V51_
+
 ifeq ($(boardtype), snapav16d)
 	apptype:= "CONFIG+=SNAPAV_SIXTEEN"
 	rootfspath:=hs_rootfs_16d
+	grepname=V16_
 else ifeq ($(boardtype), snapav12d)
 	apptype:= "CONFIG+=SNAPAV_TWELVE"
 	rootfspath:=hs_rootfs_12d
+	grepname=V12_
 else ifeq ($(boardtype), snapav8d)
 	apptype:= "CONFIG+=SNAPAV_EIGHT"
 	rootfspath:=hs_rootfs_8d
+	grepname=V8_
 else ifeq ($(boardtype), snapav2d)
 	apptype:= "CONFIG+=SNAPAV_TWO"
 	rootfspath:=hs_rootfs
+	grepname=V2_
 else ifeq ($(boardtype), snapav51)
 	apptype:= "CONFIG+=SNAPAV_FIVENONE"
 	app:=snapavapp51
@@ -30,8 +34,11 @@ else
 	exit ;
 endif
 
+appversion :=$(shell  cat ../$(appsrc)/main.cpp  | grep SoftwareVersion | awk '{print $$3}' | grep ${grepname} | sed -s "s/\.//g" | sed -s "s/$(grepname)//g" | sed -s "s/\"//g")
+dspversion :=$(shell  cat ../$(appsrc)/main.cpp  | grep DSPVersion | awk '{print $$3}' | grep ${grepname} | sed -s "s/\.//g" | sed -s "s/$(grepname)//g" | sed -s "s/\"//g")
+#dspversion :=100
 
-all: app 
+fw: getappver getdspver 
 	echo ${boardtype}
 	./build.sh kernel $(boardtype)
 	if [ -h ../nuc970_buildroot/output/target/etc/network/interfaces ] ;then \
@@ -42,6 +49,7 @@ all: app
 	fi
 	./build.sh rootfs $(boardtype) ${appversion} ${dspversion}
 	./build.sh fw $(boardtype) ${appversion}.${dspversion}_`date "+%Y%m%d"` ${deletedatabase}
+
 
 toolchain:
 	if [ ! -d ../image ];then mkdir ../image ;fi || true
@@ -61,7 +69,11 @@ app:
 	arm-linux-strip ../$(appsrc)/$(app) 
 	cp ../$(appsrc)/$(app) ../nuc970_buildroot/board/nuvoton/$(rootfspath)/root/snapav/
 
-sync:
+getappver:
+	@echo appversion=$(appversion)
+
+getdspver:
+	@echo dspversion=$(dspversion)
 
 cleanapp:
 	make -C  ../$(appsrc)/ -f Makefile clean
