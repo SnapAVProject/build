@@ -220,6 +220,7 @@ if [ 0 -eq 1 ];then
 		cd ./fw/snapav51/
 	fi
 else 
+	cp ../nuc970_buildroot/output/images/rootfs.jffs2 ./fw/snapav/snapav-firmware/rootfs.img
 	cd ./fw/snapav/
 fi
 	echo $dsp > snapav-firmware/deleteDb.config
