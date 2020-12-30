@@ -38,8 +38,8 @@ appversion :=$(shell  cat ../$(appsrc)/main.cpp  | grep SoftwareVersion | awk '{
 dspversion :=$(shell  cat ../$(appsrc)/main.cpp  | grep DSPVersion | awk '{print $$3}' | grep ${grepname} | sed -s "s/\.//g" | sed -s "s/$(grepname)//g" | sed -s "s/\"//g")
 #dspversion :=100
 
-fw: getappver getdspver 
-	echo ${boardtype}
+fw: getappver getdspver app 
+	@echo boardtype=${boardtype}
 	./build.sh kernel $(boardtype)
 	if [ -h ../nuc970_buildroot/output/target/etc/network/interfaces ] ;then \
 		rm  ../nuc970_buildroot/output/target/etc/network/interfaces ;\
@@ -65,6 +65,7 @@ toolchain:
 
 app:
 	cd ../$(appsrc)/;qmake -makefile $(appproname).pro -o Makefile $(apptype) 
+	make -C ../$(appsrc)/ -f Makefile -j24 clean
 	make -C ../$(appsrc)/ -f Makefile -j24
 	arm-linux-strip ../$(appsrc)/$(app) 
 	cp ../$(appsrc)/$(app) ../nuc970_buildroot/board/nuvoton/$(rootfspath)/root/snapav/
