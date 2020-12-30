@@ -26,4 +26,5 @@ cd ../
 echo "======================================"
 echo -e "\033[32m FW build success:\033[0m"
 echo -e "\033[32m `pwd`/$fwname.dat \033[0m"
+echo -e "\033[32m size:`stat -t $fwname.dat | awk '{print $2}'` \033[0m"
 echo "======================================"
