@@ -8,9 +8,10 @@ PIDFILE=/var/run/nginx.pid
 case "$1" in
   start)
 	echo "Starting setbootflag..."
-	
-	/usr/bin/snapav_updater -s
-
+	/usr/bin/checkrootfs.sh
+	if [ $? = '0' ] ;then
+		/usr/bin/snapav_updater -s
+	fi
 	;;
   *)
 	exit 1
