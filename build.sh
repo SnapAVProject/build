@@ -3,6 +3,7 @@
 boardtype=$2
 app=$3
 dsp=$4
+web=$5
 
 printuse(){
 
@@ -131,7 +132,7 @@ buildrootfs(){
 
 	echo cp ../build/buildrootconfig/${boardtype}_buildroot_config .config
 	cp ../build/buildrootconfig/${boardtype}_buildroot_config .config
-	make BOARDTYPE=$boardtype SNAPAV_APP_VERSION=$app SNAPAV_DSP_VERSION=$dsp -j24
+	make BOARDTYPE=$boardtype SNAPAV_APP_VERSION=$app SNAPAV_DSP_VERSION=$dsp SNAPAV_WEB_VERSION=$web -j24
 
 	#cd ../Rootfs/
 	#./buildjffs2img.sh

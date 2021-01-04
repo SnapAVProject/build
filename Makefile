@@ -5,6 +5,7 @@ app:=snapavapp
 rootfspath:=hs_rootfs_51
 appsrc:=snapav_app
 appproname:=snapavapp
+websrc:=web/snapav_5.1_web/
 
 grepname=V51_
 
@@ -12,18 +13,22 @@ ifeq ($(boardtype), snapav16d)
 	apptype:= "CONFIG+=SNAPAV_SIXTEEN"
 	rootfspath:=hs_rootfs_16d
 	grepname=V16_
+	websrc:=web/snapav_16d_web/
 else ifeq ($(boardtype), snapav12d)
 	apptype:= "CONFIG+=SNAPAV_TWELVE"
 	rootfspath:=hs_rootfs_12d
 	grepname=V12_
+	websrc:=web/snapav_12d_web/
 else ifeq ($(boardtype), snapav8d)
 	apptype:= "CONFIG+=SNAPAV_EIGHT"
 	rootfspath:=hs_rootfs_8d
 	grepname=V8_
+	websrc:=web/snapav_8d_web/
 else ifeq ($(boardtype), snapav2d)
 	apptype:= "CONFIG+=SNAPAV_TWO"
 	rootfspath:=hs_rootfs
 	grepname=V2_
+	websrc:=web/snapav_2d_web/
 else ifeq ($(boardtype), snapav51)
 	apptype:= "CONFIG+=SNAPAV_FIVENONE"
 	app:=snapavapp51
@@ -36,6 +41,7 @@ endif
 
 appversion :=$(shell  cat ../$(appsrc)/main.cpp  | grep SoftwareVersion | awk '{print $$3}' | grep ${grepname} | sed -s "s/\.//g" | sed -s "s/$(grepname)//g" | sed -s "s/\"//g")
 dspversion :=$(shell  cat ../$(appsrc)/main.cpp  | grep DSPVersion | awk '{print $$3}' | grep ${grepname} | sed -s "s/\.//g" | sed -s "s/$(grepname)//g" | sed -s "s/\"//g")
+webversion :=$(shell  cat ../$(websrc)/version.md  | grep 'current version' | awk '{print $$4}' |  sed -s "s/\.//g")
 #dspversion :=100
 
 fw: getappver getdspver app 
@@ -47,8 +53,8 @@ fw: getappver getdspver app
 	if [ -d  ../nuc970_buildroot/output/target/etc/network/ ] ;then \
 		cp ../nuc970_buildroot/board/nuvoton/hs_rootfs_common/etc/network/interfaces.bk ../nuc970_buildroot/output/target/etc/network/interfaces ;\
 	fi
-	./build.sh rootfs $(boardtype) ${appversion} ${dspversion}
-	./build.sh fw $(boardtype) ${appversion}.${dspversion}_`date "+%Y%m%d"` ${deletedatabase}
+	./build.sh rootfs $(boardtype) ${appversion} ${dspversion} $(webversion)
+	./build.sh fw $(boardtype) ${appversion}.${dspversion}.$(webversion)_`date "+%Y%m%d"` ${deletedatabase}
 
 
 toolchain:
@@ -59,7 +65,7 @@ toolchain:
 	if [ -d  ../nuc970_buildroot/output/target/etc/network/ ] ;then \
 		cp ../nuc970_buildroot/board/nuvoton/hs_rootfs_common/etc/network/interfaces.bk ../nuc970_buildroot/output/target/etc/network/interfaces ;\
 	fi
-	./build.sh rootfs snapav51 100 100
+	./build.sh rootfs snapav51 100 100 100
 	if [ -h ../host ];then rm ../host ;fi || true
 	ln -s ./nuc970_buildroot/output/host ../host
 
@@ -75,6 +81,9 @@ getappver:
 
 getdspver:
 	@echo dspversion=$(dspversion)
+
+getwebver:
+	@echo webversion=$(webversion)
 
 cleanapp:
 	make -C  ../$(appsrc)/ -f Makefile clean
