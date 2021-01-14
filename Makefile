@@ -57,6 +57,12 @@ fw: getappver getdspver app
 	./build.sh rootfs $(boardtype) ${appversion} ${dspversion} $(webversion)
 	./build.sh fw $(boardtype) ${appversion}.${dspversion}.$(webversion)_`date "+%Y%m%d"` ${deletedatabase}
 
+	if [ -h ../nuc970_buildroot/output/target/etc/network/interfaces ] ;then \
+		rm  ../nuc970_buildroot/output/target/etc/network/interfaces ;\
+	fi
+	if [ -d  ../nuc970_buildroot/output/target/etc/network/ ] ;then \
+		cp ../nuc970_buildroot/board/nuvoton/hs_rootfs_common/etc/network/interfaces.bk ../nuc970_buildroot/output/target/etc/network/interfaces ;\
+	fi
 	./build.sh rootfs $(boardtype) ${appversion_dummy} ${dspversion} $(webversion)
 	./build.sh fw $(boardtype) ${appversion_dummy}.${dspversion}.$(webversion)_`date "+%Y%m%d"` ${deletedatabase}
 
