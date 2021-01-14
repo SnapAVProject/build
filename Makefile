@@ -40,6 +40,7 @@ else
 endif
 
 appversion :=$(shell  cat ../$(appsrc)/main.cpp  | grep SoftwareVersion | awk '{print $$3}' | grep ${grepname} | sed -s "s/\.//g" | sed -s "s/$(grepname)//g" | sed -s "s/\"//g")
+appversion_dummy :=$(appversion)dummy
 dspversion :=$(shell  cat ../$(appsrc)/main.cpp  | grep DSPVersion | awk '{print $$3}' | grep ${grepname} | sed -s "s/\.//g" | sed -s "s/$(grepname)//g" | sed -s "s/\"//g")
 webversion :=$(shell  cat ../$(websrc)/version.md  | grep 'current version' | awk '{print $$4}' |  sed -s "s/\.//g")
 #dspversion :=100
@@ -56,6 +57,8 @@ fw: getappver getdspver app
 	./build.sh rootfs $(boardtype) ${appversion} ${dspversion} $(webversion)
 	./build.sh fw $(boardtype) ${appversion}.${dspversion}.$(webversion)_`date "+%Y%m%d"` ${deletedatabase}
 
+	./build.sh rootfs $(boardtype) ${appversion_dummy} ${dspversion} $(webversion)
+	./build.sh fw $(boardtype) ${appversion_dummy}.${dspversion}.$(webversion)_`date "+%Y%m%d"` ${deletedatabase}
 
 toolchain:
 	if [ ! -d ../image ];then mkdir ../image ;fi || true
