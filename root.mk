@@ -38,7 +38,7 @@ all: $(TARGET)
 ifeq ($(BOARDTYPE), spa25)
 $(TARGET): uboot rootfs kernel app tools web dirac release
 else
-$(TARGET): uboot rootfs kernel app tools web release
+$(TARGET): uboot rootfs kernel tools web release
 endif
 
 
@@ -67,9 +67,10 @@ uboot:
 .PHONY:kernel
 kernel:
 	@echo '====== Building the Kernel ======'
-	@cp build/kernelconfig/${BOARDTYPE}_config ${KERNEL_SRC}/.config
-	make -C linux3.10/ uImage -j8 CROSS_COMPILE=$(PWD)/prebuilt/arm9-nuvoton/usr/bin/arm-linux-
-	make -C linux3.10/ modules -j8 CROSS_COMPILE=$(PWD)/prebuilt/arm9-nuvoton/usr/bin/arm-linux-
+	@cp build/kernelconfig/${BOARDTYPE}_config ${KERNEL_SRC}/arch/arm/configs/${BOARDTYPE}_defconfig
+	make -C linux3.10/ ${BOARDTYPE}_defconfig CROSS_COMPILE=$(PWD)/prebuilt/arm9-nuvoton/usr/bin/arm-linux-
+	make -C linux3.10/ uImage -j16 CROSS_COMPILE=$(PWD)/prebuilt/arm9-nuvoton/usr/bin/arm-linux-
+	make -C linux3.10/ modules -j16 CROSS_COMPILE=$(PWD)/prebuilt/arm9-nuvoton/usr/bin/arm-linux-
 	bash build/package.sh kernel
 
 
@@ -87,7 +88,7 @@ rootfs:
 #@ln -sf $(PWD)/${TOOLS_SRC} $(HANSONGTOOLS)/package
 	@cp build/buildrootconfig/${BOARDTYPE}_defconfig ${ROOTFS_SRC}/configs/${BOARDTYPE}_defconfig
 	make -C rootfs20190207/ O=${PWD}/${OUTDIR} ${BOARDTYPE}_defconfig
-	make -C rootfs20190207/ O=${PWD}/${OUTDIR} BR_NO_CHECK_HASH_FOR=linux-3.10.10.tar.xz -j8
+	make -C rootfs20190207/ O=${PWD}/${OUTDIR} BR_NO_CHECK_HASH_FOR=linux-3.10.10.tar.xz -j16
 	@cp $(PWD)/prebuilt/arm9-nuvoton/usr/arm-buildroot-linux-gnueabi/lib/libstdc++.so.6.0.24 ${PWD}/${OUTDIR}/target/lib/
 	cd ${OUTDIR}/target/lib/ && ln -sf libstdc++.so.6.0.24 libstdc++.so.6 && ln -sf libstdc++.so.6.0.24 libstdc++.so
 	@cp $(PWD)/prebuilt/arm9-nuvoton/usr/arm-buildroot-linux-gnueabi/sysroot/usr/lib/libminiupnpc.so.2.0 ${PWD}/${OUTDIR}/target/usr/lib/
