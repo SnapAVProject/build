@@ -74,7 +74,14 @@ function copy_image()
     if [ -e $RELDIR/u-boot.bin ] ; then
 		rm $RELDIR/u-boot.bin
     fi
-    echo $BOARDTYPE >$RELDIR/boardtype
+	if [ "$BOARDTYPE" = "ams8v2"  ];then
+		echo 'control4-8' >$RELDIR/boardtype
+	elif [ "$BOARDTYPE" = "ams16" ];then
+		echo 'control4-16' >$RELDIR/boardtype
+	else
+		echo $BOARDTYPE >$RELDIR/boardtype
+	fi
+    echo [$BOARDTYPE]
     # TODO - below SHOULD be done via a config-able way
     echo 'true' > $RELDIR/deleteDb.config
 
